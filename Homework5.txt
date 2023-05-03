@@ -1,0 +1,19 @@
+-- Вывести количественное распределение оценок (реакций) по стриму №1.
+
+select streams.stream_id, reactions.value, count(*) from reactions
+join streams on streams.stream_id=reactions.stream_id
+where streams.stream_id = 1
+group by reactions.value;
+
+-- Вывести список стран, откуда идут пожертвования.
+
+SELECT DISTINCT users.country
+FROM users
+JOIN donations ON donations.donator_id = users.user_id;
+
+-- Вывести сумму и ко-во всех полученных пожертвований стримером №1 
+
+SELECT streams.stream_id, COUNT(donations.donation_id) as donations_count, SUM(donations.amount) as donations_sum
+FROM donations 
+JOIN streams ON streams.stream_id = donations.stream_id
+WHERE streams.stream_id = 1;
