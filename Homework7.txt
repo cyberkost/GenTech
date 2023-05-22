@@ -1,0 +1,14 @@
+-- Вывести билеты, купленные на определенную дату
+
+SELECT tickets.ticket_id, movies.title, timetable.start_time
+FROM tickets
+JOIN timetable ON tickets.timetable_id = timetable.timetable_id
+JOIN movies ON timetable.movie_id = movies.movie_id
+WHERE DATE(timetable.start_time) = '2023-05-22';
+
+-- Вывести информацию о покупке билетов. В какие дни недели продаж больше всего: название, дня, недели, кол-во_продаж
+
+SELECT DAYNAME(tickets.created_at) AS weekday, COUNT(*) AS sales_count
+FROM tickets
+GROUP BY DAYNAME
+ORDER BY sales_count DESC;
