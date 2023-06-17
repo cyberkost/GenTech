@@ -1,0 +1,68 @@
+// Создать несколько транзакций
+
+db.transactions.insertMany([
+  {
+    id: "t001",
+    created_at: new Date(),
+    amount: 1000,
+    type: "deposit",
+    account_id: "a001",
+    description: "Deposit to savings account",
+    is_completed: true
+  },
+  {
+    id: "t002",
+    created_at: new Date(),
+    amount: -500,
+    type: "withdrawal",
+    account_id: "a002",
+    description: "ATM withdrawal",
+    is_completed: false
+  },
+  {
+    id: "t003",
+    created_at: new Date(),
+    amount: 50,
+    type: "deposit",
+    account_id: "a001",
+    description: "Deposit to savings account",
+    is_completed: true
+  }
+]);
+
+// Вывести только завершенные транзакции от 100 EUR
+
+db.transactions.find({
+  amount: { $gte: 100 },
+  is_completed: true
+})
+
+// Вывести незаблокированных пользователей из Germany и China с балансом до 10000
+
+db.clients.find({
+  country: { $in: ["Germany", "China"] },
+  balance: { $lte: 10000 },
+  is_blocked: { $ne: true }
+})
+
+// У звонков с продолжительностью до 1 часа удалить темы money и important
+
+db.calls.updateMany(
+  {
+    duration_secs: { $lte: 3600 },
+    topics: { $in: ["money", "important"] }
+  },
+  {
+    $pull: { topics: { $in: ["money", "important"] } }
+  }
+)
+
+
+// Ко всем звонкам добавить темы checked и new
+
+db.calls.updateMany(
+  {},
+  {
+    $addToSet: { topics: { $each: ["checked", "new"] } }
+  }
+)
